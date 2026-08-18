@@ -5,9 +5,11 @@ from fastapi.templating import Jinja2Templates
 
 app = FastAPI(title="PropFlow AI")
 
-# Get absolute path to the templates directory
+# Force explicit path to the templates directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+templates_path = os.path.join(BASE_DIR, "templates")
+
+templates = Jinja2Templates(directory=templates_path)
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_home(request: Request):
@@ -16,6 +18,7 @@ async def serve_home(request: Request):
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
 
 
 
