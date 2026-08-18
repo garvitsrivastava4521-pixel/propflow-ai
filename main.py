@@ -1,14 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
-app = FastAPI(
-    title="PropFlow AI",
-    description="Real Estate AI Automation API"
-)
+app = FastAPI(title="PropFlow AI")
+templates = Jinja2Templates(directory="templates")
 
-@app.get("/")
-def home():
-    return {"status": "success", "message": "PropFlow AI Server is Live!"}
+@app.get("/", response_class=HTMLResponse)
+async def serve_home(request: Request):
+    return templates.TemplateResponse(request, "index.html")
 
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+
