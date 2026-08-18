@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropFlow AI - Real Estate Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen flex flex-col justify-between">
+    <!-- Navigation -->
+    <nav class="p-6 flex justify-between items-center border-b border-slate-800">
+        <h1 class="text-2xl font-bold text-blue-500">PropFlow AI</h1>
+        <div>
+            <a href="#about" class="px-4 text-slate-300 hover:text-white">About Us</a>
+            <a href="#demo" class="bg-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-500">Book Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="max-w-4xl mx-auto text-center px-6 py-16">
+        <h2 class="text-5xl font-extrabold tracking-tight mb-6">AI Lead Automation for Real Estate Agencies</h2>
+        <p class="text-lg text-slate-400 mb-8">Capture, qualify, and route prospective home buyers to your CRM 24/7 without manual effort.</p>
+    </main>
+
+    <!-- Floating AI Chatbot Widget -->
+    <div class="fixed bottom-6 right-6 w-80 bg-slate-800 rounded-xl border border-slate-700 shadow-2xl overflow-hidden">
+        <div class="bg-blue-600 p-4 font-bold">PropFlow Assistant</div>
+        <div id="chat-box" class="p-4 h-48 overflow-y-auto text-sm space-y-2 text-slate-300">
+            <p class="bg-slate-700 p-2 rounded">Hello! Looking to buy or list a property today?</p>
+        </div>
+        <div class="p-2 border-t border-slate-700 flex">
+            <input id="user-input" type="text" placeholder="Ask a question..." class="w-full bg-slate-900 text-white px-3 py-1 rounded-l text-sm focus:outline-none">
+            <button onclick="sendMessage()" class="bg-blue-600 px-3 py-1 text-sm rounded-r hover:bg-blue-500">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            if (input.value.trim() === '') return;
+            chatBox.innerHTML += `<p class="bg-blue-900/50 p-2 rounded text-right">${input.value}</p>`;
+            const text = input.value;
+            input.value = '';
+            
+            // Simulating API response
+            setTimeout(() => {
+                chatBox.innerHTML += `<p class="bg-slate-700 p-2 rounded">Thanks! A PropFlow AI agent is reviewing your query about "${text}".</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 500);
+        }
+    </script>
+</body>
+</html>
