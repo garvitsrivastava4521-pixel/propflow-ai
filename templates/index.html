@@ -3,50 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PropFlow AI - Real Estate Automation</title>
+    <title>PropFlow AI | Next-Gen Real Estate Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-white font-sans min-h-screen flex flex-col justify-between">
-    <!-- Navigation -->
-    <nav class="p-6 flex justify-between items-center border-b border-slate-800">
-        <h1 class="text-2xl font-bold text-blue-500">PropFlow AI</h1>
-        <div>
-            <a href="#about" class="px-4 text-slate-300 hover:text-white">About Us</a>
-            <a href="#demo" class="bg-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-500">Book Demo</a>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 glass border-b border-slate-800/80 px-4 py-3 sm:px-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand SVG Logo -->
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="p-2 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl shadow-lg shadow-blue-500/20">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-blue-400">
+                    PropFlow <span class="text-blue-500">AI</span>
+                </span>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="flex items-center gap-4">
+                <a href="#about" class="hidden sm:inline-block text-sm font-medium text-slate-400 hover:text-white transition-colors">About Us</a>
+                <button class="bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all shadow-md shadow-blue-600/30">
+                    Book Demo
+                </button>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <main class="max-w-4xl mx-auto text-center px-6 py-16">
-        <h2 class="text-5xl font-extrabold tracking-tight mb-6">AI Lead Automation for Real Estate Agencies</h2>
-        <p class="text-lg text-slate-400 mb-8">Capture, qualify, and route prospective home buyers to your CRM 24/7 without manual effort.</p>
+    <main class="flex-1 flex items-center justify-center px-4 py-16 text-center max-w-4xl mx-auto">
+        <div class="space-y-6">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                AI-Powered Real Estate
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                Automate Leads & Property Flows effortlessly.
+            </h1>
+            <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
+                Capture buyers, schedule tours, and convert listings 24/7 with our specialized real estate intelligence suite.
+            </p>
+            <div class="pt-4 flex justify-center gap-3">
+                <button class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-blue-500/25 transition-all">
+                    Get Started Free
+                </button>
+            </div>
+        </div>
     </main>
 
-    <!-- Floating AI Chatbot Widget -->
-    <div class="fixed bottom-6 right-6 w-80 bg-slate-800 rounded-xl border border-slate-700 shadow-2xl overflow-hidden">
-        <div class="bg-blue-600 p-4 font-bold">PropFlow Assistant</div>
-        <div id="chat-box" class="p-4 h-48 overflow-y-auto text-sm space-y-2 text-slate-300">
-            <p class="bg-slate-700 p-2 rounded">Hello! Looking to buy or list a property today?</p>
+    <!-- Floating Chatbot Launcher -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <!-- Chat Window (Collapsible) -->
+        <div id="chat-window" class="hidden w-[90vw] sm:w-96 h-[480px] glass bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl flex-col overflow-hidden mb-4 transition-all">
+            <!-- Header -->
+            <div class="bg-blue-600 p-4 text-white flex items-center justify-between shadow-md">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                    <span class="font-semibold text-sm">PropFlow Assistant</span>
+                </div>
+                <button onclick="toggleChat()" class="text-white/80 hover:text-white text-lg">✕</button>
+            </div>
+            
+            <!-- Messages Area -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm">
+                <div class="bg-slate-800 text-slate-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-700">
+                    Hello! Looking to buy or list a property today?
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <form id="chat-form" onsubmit="handleSend(event)" class="p-3 border-t border-slate-800 flex gap-2">
+                <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-1 bg-slate-950 text-slate-100 placeholder-slate-500 border border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors">
+                    Send
+                </button>
+            </form>
         </div>
-        <div class="p-2 border-t border-slate-700 flex">
-            <input id="user-input" type="text" placeholder="Ask a question..." class="w-full bg-slate-900 text-white px-3 py-1 rounded-l text-sm focus:outline-none">
-            <button onclick="sendMessage()" class="bg-blue-600 px-3 py-1 text-sm rounded-r hover:bg-blue-500">Send</button>
-        </div>
+
+        <!-- Floating Button -->
+        <button onclick="toggleChat()" class="bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+        </button>
     </div>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            if (input.value.trim() === '') return;
-            chatBox.innerHTML += `<p class="bg-blue-900/50 p-2 rounded text-right">${input.value}</p>`;
-            const text = input.value;
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            chatWindow.classList.toggle('hidden');
+            chatWindow.classList.toggle('flex');
+        }
+
+        function handleSend(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+            if (!input.value.trim()) return;
+
+            // Append user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-sm';
+            userMsg.textContent = input.value;
+            messages.appendChild(userMsg);
+
             input.value = '';
-            
-            setTimeout(() => {
-                chatBox.innerHTML += `<p class="bg-slate-700 p-2 rounded">Thanks! A PropFlow AI agent is reviewing your query about "${text}".</p>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 500);
+            messages.scrollTop = messages.scrollHeight;
         }
     </script>
 </body>
