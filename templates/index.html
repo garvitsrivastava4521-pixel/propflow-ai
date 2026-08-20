@@ -94,7 +94,7 @@
         <!-- Floating Button -->
         <button onclick="toggleChat()" class="bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
         </button>
     </div>
@@ -106,20 +106,43 @@
             chatWindow.classList.toggle('flex');
         }
 
-        function handleSend(e) {
+        async function handleSend(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
             const messages = document.getElementById('chat-messages');
-            if (!input.value.trim()) return;
+            const text = input.value.trim();
+            if (!text) return;
 
-            // Append user message
+            // Display user message
             const userMsg = document.createElement('div');
             userMsg.className = 'bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-sm';
-            userMsg.textContent = input.value;
+            userMsg.textContent = text;
             messages.appendChild(userMsg);
-
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
+
+            try {
+                // Call FastAPI backend endpoint
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await res.json();
+
+                // Display assistant response
+                const botMsg = document.createElement('div');
+                botMsg.className = 'bg-slate-800 text-slate-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] border border-slate-700 text-sm';
+                botMsg.textContent = data.reply;
+                messages.appendChild(botMsg);
+                messages.scrollTop = messages.scrollHeight;
+            } catch (err) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'bg-red-500/20 text-red-300 p-2 rounded-xl text-xs text-center';
+                errorMsg.textContent = 'Connection error. Please try again.';
+                messages.appendChild(errorMsg);
+            }
         }
     </script>
 </body>
