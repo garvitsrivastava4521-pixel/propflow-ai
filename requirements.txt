@@ -2,6 +2,9 @@ fastapi
 uvicorn
 jinja2
 pydantic
-openai
+groq
+google-genai
 python-multipart
+pypdf
+
 
