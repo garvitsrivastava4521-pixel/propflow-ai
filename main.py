@@ -1,20 +1,43 @@
 import streamlit as st
 
-# Set page configuration
-st.set_page_config(page_title="EstateMind AI", page_icon="🏢", layout="centered")
+# 1. Page Configuration
+st.set_page_config(page_title="PropelRealty AI", page_icon="🚀", layout="centered")
 
-# Initialize session state for navigation
+# 2. Custom Styling for High-End Real Estate Look
+st.markdown("""
+<style>
+    /* Dark Premium Theme Accent */
+    .stApp {
+        background-color: #0F172A;
+        color: #F8FAFC;
+    }
+    /* Sleek Container & Card Styling */
+    div[data-testid="stForm"], div[data-testid="stVerticalBlock"] > div[style*="background-color"] {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 20px;
+    }
+    /* Buttons */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 600;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 3. Session State Initialization
 if "page" not in st.session_state:
     st.session_state.page = "landing"
 
 # --- PAGE 1: LANDING PAGE ---
 if st.session_state.page == "landing":
-    st.title("🏢 EstateMind AI")
+    st.title("🚀 PropelRealty AI")
     st.markdown("---")
-    st.header("Welcome to EstateMind AI.")
+    st.header("Welcome to PropelRealty AI.")
     st.subheader("Your Smart Real Estate Assistant. Let AI guide you to the perfect property.")
     
-    st.write("") # Spacer
+    st.write("")  # Spacer
     if st.button("Get Started ➔", type="primary", use_container_width=True):
         st.session_state.page = "how_it_works"
         st.rerun()
@@ -24,19 +47,27 @@ if st.session_state.page == "landing":
 elif st.session_state.page == "how_it_works":
     # Top Navigation Bar
     col1, col2, col3, col4 = st.columns(4)
-    col1.markdown("**HOME**")
-    col2.markdown("ABOUT US")
-    col3.markdown("PLANS")
-    col4.markdown("BOOK OUR DEMO")
+    if col1.button("HOME", use_container_width=True):
+        st.session_state.page = "how_it_works"
+        st.rerun()
+    if col2.button("ABOUT US", use_container_width=True):
+        st.session_state.page = "about_us"
+        st.rerun()
+    if col3.button("PLANS", use_container_width=True):
+        st.session_state.page = "plans"
+        st.rerun()
+    if col4.button("BOOK DEMO", use_container_width=True):
+        st.session_state.page = "book_demo"
+        st.rerun()
+        
     st.markdown("---")
-    
     st.header("Simple Steps to Your New Property")
     
     st.markdown("📄 **1. UPLOAD DOCUMENTS**")
     st.write("First, upload all necessary documents (IDs, financial statements) to our secure platform.")
     
     st.markdown("🤖 **2. AI CHATBOT ANSWERS QUERIES**")
-    st.write("Interact with the EstateMind AI chatbot to get immediate, detailed answers to all your property-related questions.")
+    st.write("Interact with the PropelRealty AI chatbot to get immediate, detailed answers to all your property-related questions.")
     
     st.markdown("📅 **3. SCHEDULE MEETINGS**")
     st.write("Specify your desired dates and times for meetings to fit your busy schedule.")
@@ -59,7 +90,7 @@ elif st.session_state.page == "form":
     with st.form("agency_form"):
         agency_name = st.text_input("Agency Name", placeholder="Enter Agency Name")
         agency_email = st.text_input("Agency Email Address", placeholder="name@agency.com")
-        phone = st.text_input("Primary Phone Number", placeholder="+1 (555) 000-0000")
+        phone = st.text_input("Primary Phone Number", placeholder="+91 98765 43210 (include country code)")
         address = st.text_input("Agency Address", placeholder="Street Address, City")
         agency_type = st.selectbox("Agency Type", ["Residential", "Commercial", "Luxury", "Other"])
         
@@ -89,7 +120,9 @@ elif st.session_state.page == "plans":
         * 📧 Email Support
         """)
         if st.button("SELECT ONE-TIME", key="btn_one_time", use_container_width=True):
-            st.success("Plan Selected! Proceeding to payment setup...")
+            st.session_state.selected_plan = "One-Time Access ($1000)"
+            st.session_state.page = "checkout"
+            st.rerun()
             
     with col2:
         st.subheader("PREMIUM RETAINER ⭐")
@@ -106,9 +139,83 @@ elif st.session_state.page == "plans":
         * 👤 Dedicated Account Manager
         """)
         if st.button("SELECT RETAINER", key="btn_retainer", type="primary", use_container_width=True):
-            st.success("Retainer Selected! Proceeding to payment setup...")
+            st.session_state.selected_plan = "Premium Retainer ($1000 + $200/mo)"
+            st.session_state.page = "checkout"
+            st.rerun()
 
     st.info("Retainer features are exclusive to the monthly plan and enhance team productivity and client engagement.")
+
+# --- PAGE 5: PAYMENT GATEWAY ---
+elif st.session_state.page == "checkout":
+    st.header("💳 Payment & Activation")
+    st.write(f"Selected Plan: **{st.session_state.get('selected_plan', 'Premium Retainer')}**")
+    st.markdown("---")
+    
+    pay_method = st.radio("Choose Payment Method:", ["USDT (BEP20 - Binance Smart Chain)", "Standard Bank Wire Transfer"])
+    
+    if pay_method == "USDT (BEP20 - Binance Smart Chain)":
+        st.info("⚡ Fast Automated Crypto Settlement")
+        st.write("Deposit Wallet Address (BEP20):")
+        st.code("0x71C7656EC7ab88b098defB751B7401B5f6d8976F", language="text")
+        st.caption("Send exact amount in USDT via BEP20 network. Enter your transaction hash below for verification.")
+        tx_hash = st.text_input("Transaction Hash (TxHash)")
+        if st.button("Verify Crypto Payment", type="primary", use_container_width=True):
+            if tx_hash:
+                st.success("Payment recorded! Our team is configuring your PropelRealty AI instance.")
+            else:
+                st.warning("Please enter your transaction hash.")
+            
+    else:
+        st.info("🏦 Direct Corporate Bank Transfer")
+        st.markdown("""
+        * **Bank Name:** Global Real Estate Clearing Bank
+        * **Account Name:** PropelRealty AI LLC
+        * **IBAN / Account:** US89 3704 0044 0532 0130 00
+        * **SWIFT/BIC:** GRELUS33
+        """)
+        reference = st.text_input("Enter Wire Reference / UTR Number")
+        if st.button("Submit Wire Confirmation", type="primary", use_container_width=True):
+            if reference:
+                st.success("Wire reference recorded. Access details will be emailed upon clearing.")
+            else:
+                st.warning("Please enter your wire transfer reference number.")
+
+# --- PAGE 6: ABOUT US ---
+elif st.session_state.page == "about_us":
+    st.header("About PropelRealty AI")
+    st.markdown("""
+    **PropelRealty AI** is built specifically for modern real estate agencies, brokerages, and advisors. 
+    
+    Our platform automates client intake, securely parses complex property documentation, and provides 24/7 intelligent AI chatbot assistance to ensure no lead or query goes unanswered.
+    
+    * 🔒 **Enterprise-Grade Security:** 256-bit document encryption.
+    * ⚡ **Ultra-Fast AI Engine:** Instant response generation for client inquiries.
+    * 📅 **Seamless Scheduling:** Integrated calendar booking and client follow-ups.
+    """)
+    if st.button("⬅ Back to Home", type="primary"):
+        st.session_state.page = "how_it_works"
+        st.rerun()
+
+# --- PAGE 7: BOOK OUR DEMO ---
+elif st.session_state.page == "book_demo":
+    st.header("Book a Live 1-on-1 Demo")
+    st.write("Schedule a direct walk-through with our product specialists to see PropelRealty AI in action.")
+    
+    with st.form("demo_form"):
+        name = st.text_input("Your Name")
+        email = st.text_input("Work Email")
+        preferred_date = st.date_input("Preferred Demo Date")
+        notes = st.text_area("Specific Requirements / Team Size")
+        
+        if st.form_submit_button("BOOK DEMO NOW ➔", type="primary", use_container_width=True):
+            if name and email:
+                st.success("Demo request submitted! We will send a calendar invitation shortly.")
+            else:
+                st.error("Please enter your name and email.")
+                
+    if st.button("⬅ Back to Home"):
+        st.session_state.page = "how_it_works"
+        st.rerun()
 
 
 
