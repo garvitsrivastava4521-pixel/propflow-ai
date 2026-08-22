@@ -1,12 +1,11 @@
-fastapi
-uvicorn
-jinja2
-pydantic
+streamlit
 groq
 google-genai
-python-multipart
 pypdf
+fastapi
+uvicorn
 gunicorn
-
+jinja2
+python-multipart
 
 
