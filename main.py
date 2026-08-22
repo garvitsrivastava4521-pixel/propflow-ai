@@ -1,27 +1,18 @@
 import streamlit as st
 
 # 1. Page Configuration
-st.set_page_config(page_title="PropelRealty AI", page_icon="🚀", layout="centered")
+st.set_page_config(page_title="PropelRealty AI", page_icon="🏢", layout="centered")
 
-# 2. Custom Styling for High-End Real Estate Look
+# 2. Clean Mobile Typography Adjustments
 st.markdown("""
 <style>
-    /* Dark Premium Theme Accent */
-    .stApp {
-        background-color: #0F172A;
-        color: #F8FAFC;
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
-    /* Sleek Container & Card Styling */
-    div[data-testid="stForm"], div[data-testid="stVerticalBlock"] > div[style*="background-color"] {
-        background-color: #1E293B;
-        border: 1px solid #334155;
-        border-radius: 12px;
-        padding: 20px;
-    }
-    /* Buttons */
-    .stButton>button {
-        border-radius: 8px;
-        font-weight: 600;
+    h1 {
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -32,12 +23,12 @@ if "page" not in st.session_state:
 
 # --- PAGE 1: LANDING PAGE ---
 if st.session_state.page == "landing":
-    st.title("🚀 PropelRealty AI")
+    st.title("🏢 PropelRealty AI")
     st.markdown("---")
     st.header("Welcome to PropelRealty AI.")
     st.subheader("Your Smart Real Estate Assistant. Let AI guide you to the perfect property.")
     
-    st.write("")  # Spacer
+    st.write("")
     if st.button("Get Started ➔", type="primary", use_container_width=True):
         st.session_state.page = "how_it_works"
         st.rerun()
