@@ -6,5 +6,8 @@ groq
 google-genai
 python-multipart
 pypdf
+uvicorn
+gunicorn
+
 
 
