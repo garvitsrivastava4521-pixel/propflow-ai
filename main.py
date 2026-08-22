@@ -1,90 +1,66 @@
 import os
-from fastapi import FastAPI, Request, File, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+import streamlit as st
+import google.generativeai as genai
 from groq import Groq
-from google import genai
 
-app = FastAPI(title="EstateMind AI")
+# 1. Page Configuration & Theme
+st.set_page_config(
+    page_title="EstateMind AI",
+    page_icon="🏢",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+# 2. Fetch API Keys directly from Render Environment Variables
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# Initialize Dual AI Clients
-groq_key = os.getenv("GROQ_API_KEY")
-gemini_key = os.getenv("GEMINI_API_KEY")
+# Initialize API clients if keys are present
+if GROQ_API_KEY:
+    groq_client = Groq(api_key=GROQ_API_KEY)
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 
-groq_client = Groq(api_key=groq_key) if groq_key else None
-gemini_client = genai.Client(api_key=gemini_key) if gemini_key else None
+# 3. Main Interface Header
+st.title("🏢 EstateMind AI")
+st.caption("Dual-Engine Real Estate AI Agent Portal")
 
-# Memory store for active document context
-document_context = ""
+# Sidebar for Document Uploads (Agency Portal)
+with st.sidebar:
+    st.header("Agency Portal")
+    uploaded_file = st.file_uploader("Upload Property Brochure (PDF)", type=["pdf"])
+    if uploaded_file:
+        st.success("Document uploaded successfully!")
 
-class ChatMessage(BaseModel):
-    message: str
+# 4. Chat Interface
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [
+        {"role": "assistant", "content": "Welcome to EstateMind AI! How can I assist with your property queries today?"}
+    ]
 
-@app.get("/", response_class=HTMLResponse)
-async def serve_home(request: Request):
-    return templates.TemplateResponse(request, "index.html")
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
 
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}
+if prompt := st.chat_input("Ask about listings, pricing, or floor plans..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
 
-# ROUTE 1: Fast Chat powered by Groq (Llama 3.3)
-@app.post("/api/chat")
-async def chat_response(data: ChatMessage):
-    global document_context
-    if not groq_client:
-        return {"reply": "EstateMind AI Error: GROQ_API_KEY missing on server."}
+    # Response generation logic using Groq or Gemini
+    if GROQ_API_KEY:
+        try:
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            bot_reply = response.choices[0].message.content
+        except Exception as e:
+            bot_reply = f"Error generating response: {str(e)}"
+    else:
+        bot_reply = "GROQ_API_KEY is missing. Please add it to your Render Environment settings."
 
-    system_prompt = (
-        "You are EstateMind AI, a high-converting real estate agent assistant. "
-        "Answer questions concisely and professionally."
-    )
-    
-    if document_context:
-        system_prompt += f"\nUse this property document knowledge when answering:\n{document_context}"
+    st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+    st.chat_message("assistant").write(bot_reply)
 
-    try:
-        completion = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": data.message}
-            ],
-            temperature=0.6,
-            max_tokens=200
-        )
-        return {"reply": completion.choices[0].message.content}
-    except Exception as e:
-        return {"reply": f"EstateMind AI Chat Error: {str(e)}"}
-
-# ROUTE 2: Document Processing powered by Google Gemini
-@app.post("/api/documents/upload")
-async def upload_document(file: UploadFile = File(...)):
-    global document_context
-    if not gemini_client:
-        return JSONResponse({"error": "GEMINI_API_KEY missing on server."}, status_code=400)
-
-    try:
-        contents = await file.read()
-        
-        # Pass document bytes directly to Gemini Flash for extraction & indexing
-        response = gemini_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=[
-                {"mime_type": file.content_type or "application/pdf", "data": contents},
-                "Summarize all property specs, prices, terms, and features from this document into key factual bullets for a sales chatbot."
-            ]
-        )
-        
-        # Save processed specs into memory context for Groq
-        document_context = response.text
-        return {"status": "success", "message": "Document processed and linked to EstateMind AI!", "summary": response.text[:200] + "..."}
-    except Exception as e:
-        return JSONResponse({"error": f"Document Processing Error: {str(e)}"}, status_code=500)
 
 
 
