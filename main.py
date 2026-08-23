@@ -30,7 +30,7 @@ st.markdown("""
 if "page" not in st.session_state:
     st.session_state.page = "landing"
 
-# LOGO DIRECT LINK (Paste your ImgBB direct link inside the quotes below)
+# LOGO DIRECT LINK https://ibb.co/x8DBjr2w
 LOGO_URL = "YOUR_IMGBB_DIRECT_LINK_HERE"
 
 # --- PAGE 1: LANDING PAGE ---
