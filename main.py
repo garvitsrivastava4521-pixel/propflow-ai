@@ -3,16 +3,25 @@ import streamlit as st
 # 1. Page Configuration
 st.set_page_config(page_title="PropelRealty AI", page_icon="🏢", layout="centered")
 
-# 2. Clean Mobile Typography Adjustments
+# 2. Custom Styling for Clean High-End SaaS Look
 st.markdown("""
 <style>
     .block-container {
-        padding-top: 2rem;
+        padding-top: 1.5rem;
         padding-bottom: 2rem;
     }
-    h1 {
-        font-size: 2.2rem !important;
-        font-weight: 700 !important;
+    /* Sleek Card Styling */
+    div[data-testid="stForm"], div[data-testid="stVerticalBlock"] > div[style*="background-color"] {
+        background-color: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    /* Primary Action Buttons */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 600;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -21,9 +30,16 @@ st.markdown("""
 if "page" not in st.session_state:
     st.session_state.page = "landing"
 
+# LOGO DIRECT LINK (Paste your ImgBB direct link inside the quotes below)
+LOGO_URL = "YOUR_IMGBB_DIRECT_LINK_HERE"
+
 # --- PAGE 1: LANDING PAGE ---
 if st.session_state.page == "landing":
-    st.title("🏢 PropelRealty AI")
+    if LOGO_URL != "YOUR_IMGBB_DIRECT_LINK_HERE":
+        st.image(LOGO_URL, width=320)
+    else:
+        st.title("🏢 PropelRealty AI")
+        
     st.markdown("---")
     st.header("Welcome to PropelRealty AI.")
     st.subheader("Your Smart Real Estate Assistant. Let AI guide you to the perfect property.")
@@ -81,7 +97,7 @@ elif st.session_state.page == "form":
     with st.form("agency_form"):
         agency_name = st.text_input("Agency Name", placeholder="Enter Agency Name")
         agency_email = st.text_input("Agency Email Address", placeholder="name@agency.com")
-        phone = st.text_input("Primary Phone Number", placeholder="+91 98765 43210 (include country code)")
+        phone = st.text_input("Primary Phone Number", placeholder="+1 98765 43210 (include country code)")
         address = st.text_input("Agency Address", placeholder="Street Address, City")
         agency_type = st.selectbox("Agency Type", ["Residential", "Commercial", "Luxury", "Other"])
         
@@ -102,7 +118,7 @@ elif st.session_state.page == "plans":
     with col1:
         st.subheader("ONE-TIME ACCESS")
         st.title("$1000")
-        st.caption("One-time fee")
+        st.caption("One-time setup fee")
         st.markdown("""
         * ✏️ Agency Profile Creation & Branding
         * 📄 Initial Document Repository (up to 50 files)
@@ -183,14 +199,24 @@ elif st.session_state.page == "about_us":
     * ⚡ **Ultra-Fast AI Engine:** Instant response generation for client inquiries.
     * 📅 **Seamless Scheduling:** Integrated calendar booking and client follow-ups.
     """)
+    
+    st.markdown("---")
+    st.markdown("### 🔒 Security & Privacy FAQ")
+    with st.expander("Is agency data used to train public AI models?"):
+        st.write("No. Every enterprise agency runs on an isolated client instance where documents and client conversations are kept 100% private.")
+        
+    with st.expander("How quickly is our agency setup completed after payment?"):
+        st.write("Your account deployment and onboarding take place within 24–48 hours of payment confirmation.")
+        
+    st.write("")
     if st.button("⬅ Back to Home", type="primary"):
         st.session_state.page = "how_it_works"
         st.rerun()
 
 # --- PAGE 7: BOOK OUR DEMO ---
 elif st.session_state.page == "book_demo":
-    st.header("Book a Live 1-on-1 Demo")
-    st.write("Schedule a direct walk-through with our product specialists to see PropelRealty AI in action.")
+    st.header("Book a Live 1-on-1 Walkthrough")
+    st.write("Schedule a direct video call with our team to see how PropelRealty AI automates lead management and document handling.")
     
     with st.form("demo_form"):
         name = st.text_input("Your Name")
@@ -198,9 +224,9 @@ elif st.session_state.page == "book_demo":
         preferred_date = st.date_input("Preferred Demo Date")
         notes = st.text_area("Specific Requirements / Team Size")
         
-        if st.form_submit_button("BOOK DEMO NOW ➔", type="primary", use_container_width=True):
+        if st.form_submit_button("REQUEST DEMO CALL ➔", type="primary", use_container_width=True):
             if name and email:
-                st.success("Demo request submitted! We will send a calendar invitation shortly.")
+                st.success("Demo request submitted! We will send a calendar invite to your email shortly.")
             else:
                 st.error("Please enter your name and email.")
                 
