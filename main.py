@@ -31,7 +31,7 @@ if "page" not in st.session_state:
     st.session_state.page = "landing"
 
 # LOGO DIRECT LINK https://ibb.co/x8DBjr2w
-LOGO_URL = "YOUR_IMGBB_DIRECT_LINK_HERE"
+LOGO_URL = https://i.ibb.co/hxLJKQMP/1787487569477.png
 
 # --- PAGE 1: LANDING PAGE ---
 if st.session_state.page == "landing":
