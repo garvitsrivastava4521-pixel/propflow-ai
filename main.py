@@ -161,31 +161,26 @@ elif st.session_state.page == "checkout":
     pay_method = st.radio("Choose Payment Method:", ["USDT (BEP20 - Binance Smart Chain)", "Standard Bank Wire Transfer"])
     
     if pay_method == "USDT (BEP20 - Binance Smart Chain)":
+        # Render USDT Logo and Title side-by-side
+        logo_col, title_col = st.columns([1, 6])
+        with logo_col:
+            # Official Tether (USDT) PNG Icon
+            st.image("https://cryptologos.cc/logos/tether-usdt-logo.png?v=035", width=45)
+        with title_col:
+            st.subheader("USDT (BEP20) Payment")
+            
         st.info("⚡ Fast Automated Crypto Settlement")
         st.write("Deposit Wallet Address (BEP20):")
         st.code("0x71C7656EC7ab88b098defB751B7401B5f6d8976F", language="text")
         st.caption("Send exact amount in USDT via BEP20 network. Enter your transaction hash below for verification.")
+        
         tx_hash = st.text_input("Transaction Hash (TxHash)")
         if st.button("Verify Crypto Payment", type="primary", use_container_width=True):
             if tx_hash:
                 st.success("Payment recorded! Our team is configuring your PropelRealty AI instance.")
             else:
                 st.warning("Please enter your transaction hash.")
-            
-    else:
-        st.info("🏦 Direct Corporate Bank Transfer")
-        st.markdown("""
-        * **Bank Name:** Global Real Estate Clearing Bank
-        * **Account Name:** PropelRealty AI LLC
-        * **IBAN / Account:** US89 3704 0044 0532 0130 00
-        * **SWIFT/BIC:** GRELUS33
-        """)
-        reference = st.text_input("Enter Wire Reference / UTR Number")
-        if st.button("Submit Wire Confirmation", type="primary", use_container_width=True):
-            if reference:
-                st.success("Wire reference recorded. Access details will be emailed upon clearing.")
-            else:
-                st.warning("Please enter your wire transfer reference number.")
+
 
 # --- PAGE 6: ABOUT US ---
 elif st.session_state.page == "about_us":
