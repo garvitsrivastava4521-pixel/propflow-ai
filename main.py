@@ -1,15 +1,21 @@
 import streamlit as st
 
-# 1. Page Configuration
-st.set_page_config(page_title="PropelRealty AI", page_icon="🏢", layout="centered")
+# --- 1. PAGE CONFIGURATION ---
+st.set_page_config(
+    page_title="PropelRealty AI",
+    page_icon="🏢",
+    layout="centered",
+    initial_sidebar_state="collapsed"
+)
 
-# 2. Custom Styling for Clean High-End SaaS Look
+# --- 2. CUSTOM CSS STYLING ---
 st.markdown("""
 <style>
-    .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 2rem;
+    /* Main Layout Styling */
+    .stApp {
+        background-color: #F8FAFC;
     }
+    
     /* Sleek Card Styling */
     div[data-testid="stForm"], div[data-testid="stVerticalBlock"] > div[style*="background-color"] {
         background-color: #FFFFFF;
@@ -18,216 +24,181 @@ st.markdown("""
         padding: 20px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
+    
     /* Primary Action Buttons */
     .stButton>button {
         border-radius: 8px;
         font-weight: 600;
     }
+
+    /* Process Step Cards */
+    .step-card {
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        color: #ffffff;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .card-1 {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .card-2 {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    }
+    .card-3 {
+        background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    }
+    .step-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .step-desc {
+        font-size: 0.9rem;
+        opacity: 0.95;
+        line-height: 1.4;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Session State Initialization
+# --- 3. SESSION STATE INITIALIZATION ---
 if "page" not in st.session_state:
     st.session_state.page = "landing"
 
-# LOGO DIRECT LINK https://ibb.co/x8DBjr2w
-LOGO_URL = "https://i.ibb.co/hxLJKQMP/1787487569477.png"
+# LOGO DIRECT LINK (Pasted inside quotes below)
+LOGO_URL = "YOUR_IMGBB_DIRECT_LINK_HERE"
+
 
 # --- PAGE 1: LANDING PAGE ---
 if st.session_state.page == "landing":
+    # Header Logo or Text Fallback
     if LOGO_URL != "YOUR_IMGBB_DIRECT_LINK_HERE":
         st.image(LOGO_URL, width=320)
     else:
         st.title("🏢 PropelRealty AI")
-        
+    
     st.markdown("---")
-    st.header("Welcome to PropelRealty AI.")
-    st.subheader("Your Smart Real Estate Assistant. Let AI guide you to the perfect property.")
     
-    st.write("")
-    if st.button("Get Started ➔", type="primary", use_container_width=True):
-        st.session_state.page = "how_it_works"
-        st.rerun()
-    st.caption("Discover your next home with ease.")
+    # Navigation Buttons
+    nav_col1, nav_col2, nav_col3 = st.columns(3)
+    with nav_col1:
+        if st.button("Plans & Pricing", use_container_width=True):
+            st.session_state.page = "checkout"
+            st.rerun()
+    with nav_col2:
+        if st.button("Get Started", type="primary", use_container_width=True):
+            st.session_state.page = "onboarding"
+            st.rerun()
+    with nav_col3:
+        if st.button("Book Demo", use_container_width=True):
+            st.info("Demo booking module ready.")
 
-# --- PAGE 2: HOW IT WORKS ---
-elif st.session_state.page == "how_it_works":
-    # Top Navigation Bar
-    col1, col2, col3, col4 = st.columns(4)
-    if col1.button("HOME", use_container_width=True):
-        st.session_state.page = "how_it_works"
-        st.rerun()
-    if col2.button("ABOUT US", use_container_width=True):
-        st.session_state.page = "about_us"
-        st.rerun()
-    if col3.button("PLANS", use_container_width=True):
-        st.session_state.page = "plans"
-        st.rerun()
-    if col4.button("BOOK DEMO", use_container_width=True):
-        st.session_state.page = "book_demo"
-        st.rerun()
-        
-    st.markdown("---")
-    st.header("Simple Steps to Your New Property")
+    st.markdown("### Simple Steps to Your New Property")
     
-    st.markdown("📄 **1. UPLOAD DOCUMENTS**")
-    st.write("First, upload all necessary documents (IDs, financial statements) to our secure platform.")
+    # Polished Process Cards
+    st.markdown("""
+    <div class="step-card card-1">
+        <div class="step-title">📁 1. UPLOAD DOCUMENTS</div>
+        <div class="step-desc">First, upload all necessary documents (IDs, financial statements) to our secure platform.</div>
+    </div>
     
-    st.markdown("🤖 **2. AI CHATBOT ANSWERS QUERIES**")
-    st.write("Interact with the PropelRealty AI chatbot to get immediate, detailed answers to all your property-related questions.")
+    <div class="step-card card-2">
+        <div class="step-title">🤖 2. AI CHATBOT ANSWERS QUERIES</div>
+        <div class="step-desc">Interact with the PropelRealty AI chatbot to get immediate, detailed answers to all your property-related questions.</div>
+    </div>
     
-    st.markdown("📅 **3. SCHEDULE MEETINGS**")
-    st.write("Specify your desired dates and times for meetings to fit your busy schedule.")
-    
-    st.markdown("✅ **4. CONFIRMATION**")
-    st.write("Your designated advisor will confirm the meeting based on your availability.")
-    
-    st.markdown("🏡 **5. PROPERTY VIEWING**")
-    st.write("Meet your advisor at your desired time for a seamless property viewing experience.")
-    
-    st.write("")
-    if st.button("GET STARTED ➔", type="primary", use_container_width=True):
-        st.session_state.page = "form"
-        st.rerun()
+    <div class="step-card card-3">
+        <div class="step-title">📅 3. SCHEDULE MEETINGS</div>
+        <div class="step-desc">Specify your desired dates and times for meetings to fit your busy schedule seamlessly.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-# --- PAGE 3: AGENCY SETUP FORM ---
-elif st.session_state.page == "form":
-    st.header("Setup Your Agency Profile")
+
+# --- PAGE 2: ONBOARDING / GET STARTED ---
+elif st.session_state.page == "onboarding":
+    st.subheader("Get Started: Let's Find Your Property")
+    st.caption("To help the AI match you perfectly, please provide a few details.")
     
-    with st.form("agency_form"):
-        agency_name = st.text_input("Agency Name", placeholder="Enter Agency Name")
-        agency_email = st.text_input("Agency Email Address", placeholder="name@agency.com")
-        phone = st.text_input("Primary Phone Number", placeholder="+1 98765 43210 (include country code)")
-        address = st.text_input("Agency Address", placeholder="Street Address, City")
-        agency_type = st.selectbox("Agency Type", ["Residential", "Commercial", "Luxury", "Other"])
+    with st.form("onboarding_form"):
+        name = st.text_input("Enter Your Name", placeholder="Garvit Srivastav")
+        prop_type = st.selectbox("Select Your Property Type", ["Residential", "Commercial", "Land"])
+        submitted = st.form_submit_button("Next Step ➔", type="primary", use_container_width=True)
         
-        submitted = st.form_submit_button("COMPLETE SETUP ➔", type="primary", use_container_width=True)
         if submitted:
-            if agency_name and agency_email:
-                st.session_state.page = "plans"
+            if name:
+                st.session_state.user_name = name
+                st.session_state.page = "checkout"
                 st.rerun()
             else:
-                st.error("Please fill in at least the Agency Name and Email.")
+                st.warning("Please enter your name to proceed.")
+                
+    if st.button("← Back to Home"):
+        st.session_state.page = "landing"
+        st.rerun()
 
-# --- PAGE 4: SELECT AGENCY PLAN ---
-elif st.session_state.page == "plans":
-    st.header("Select Your Agency Plan")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("ONE-TIME ACCESS")
-        st.title("$1000")
-        st.caption("One-time setup fee")
-        st.markdown("""
-        * ✏️ Agency Profile Creation & Branding
-        * 📄 Initial Document Repository (up to 50 files)
-        * 🤖 Limited AI Chatbot Queries (1000/mo)
-        * 👤 Single Administrator Access
-        * 📧 Email Support
-        """)
-        if st.button("SELECT ONE-TIME", key="btn_one_time", use_container_width=True):
-            st.session_state.selected_plan = "One-Time Access ($1000)"
-            st.session_state.page = "checkout"
-            st.rerun()
-            
-    with col2:
-        st.subheader("PREMIUM RETAINER ⭐")
-        st.title("$1000 + $200/mo")
-        st.caption("Upfront + Monthly Retainer")
-        st.markdown("""
-        * ✏️ Agency Setup Creation & Branding
-        * 📄 **Unlimited** Document Repository
-        * 🤖 **Unlimited** AI Chatbot Queries & Custom Training
-        * 👥 Multiple Team Member Access
-        * 📊 Advanced Performance Dashboard & Reporting
-        * 🎧 Priority Email & Chat Support
-        * 📅 Automated Client Meeting Scheduling & Reminders
-        * 👤 Dedicated Account Manager
-        """)
-        if st.button("SELECT RETAINER", key="btn_retainer", type="primary", use_container_width=True):
-            st.session_state.selected_plan = "Premium Retainer ($1000 + $200/mo)"
-            st.session_state.page = "checkout"
-            st.rerun()
 
-    st.info("Retainer features are exclusive to the monthly plan and enhance team productivity and client engagement.")
-
-# --- PAGE 5: PAYMENT GATEWAY ---
+# --- PAGE 3: PAYMENT GATEWAY & ACTIVATION ---
 elif st.session_state.page == "checkout":
-    st.header("💳 Payment & Activation")
-    st.write(f"Selected Plan: **{st.session_state.get('selected_plan', 'Premium Retainer')}**")
+    st.title("💳 Payment & Activation")
+    st.write(f"Welcome, **{st.session_state.get('user_name', 'Valued Client')}**! Select your payment method to activate your PropelRealty AI instance.")
+    
     st.markdown("---")
     
-    pay_method = st.radio("Choose Payment Method:", ["USDT (BEP20 - Binance Smart Chain)", "Standard Bank Wire Transfer"])
+    pay_method = st.radio(
+        "Select Payment Option:",
+        ["USDT (BEP20 - Binance Smart Chain)", "Traditional Bank Wire Transfer"],
+        index=0
+    )
     
+    st.markdown("---")
+    
+    # --- OPTION 1: USDT BEP20 ---
     if pay_method == "USDT (BEP20 - Binance Smart Chain)":
-        # Render USDT Logo and Title side-by-side
         logo_col, title_col = st.columns([1, 6])
         with logo_col:
-            # Official Tether (USDT) PNG Icon
-            st.image("https://cryptologos.cc/logos/tether-usdt-logo.png?v=035", width=45)
+            st.image("https://cryptologos.cc/logos/tether-usdt-logo.png?v=035", width=42)
         with title_col:
-            st.subheader("USDT (BEP20) Payment")
+            st.subheader("USDT (BEP20) Settlement")
             
         st.info("⚡ Fast Automated Crypto Settlement")
-        st.write("Deposit Wallet Address (BEP20):")
+        st.write("**Deposit Wallet Address (BEP20 Network Only):**")
         st.code("0x71C7656EC7ab88b098defB751B7401B5f6d8976F", language="text")
-        st.caption("Send exact amount in USDT via BEP20 network. Enter your transaction hash below for verification.")
+        st.caption("⚠️ Make sure you transfer via the Binance Smart Chain (BEP20) network. Transferred funds are verified on-chain.")
         
-        tx_hash = st.text_input("Transaction Hash (TxHash)")
+        tx_hash = st.text_input("Enter Transaction Hash (TxHash):", placeholder="0x...")
         if st.button("Verify Crypto Payment", type="primary", use_container_width=True):
             if tx_hash:
-                st.success("Payment recorded! Our team is configuring your PropelRealty AI instance.")
+                st.success("✅ Payment recorded! Our engine is deploying your agency instance.")
             else:
-                st.warning("Please enter your transaction hash.")
+                st.warning("Please enter your transaction hash to verify.")
 
-
-# --- PAGE 6: ABOUT US ---
-elif st.session_state.page == "about_us":
-    st.header("About PropelRealty AI")
-    st.markdown("""
-    **PropelRealty AI** is built specifically for modern real estate agencies, brokerages, and advisors. 
-    
-    Our platform automates client intake, securely parses complex property documentation, and provides 24/7 intelligent AI chatbot assistance to ensure no lead or query goes unanswered.
-    
-    * 🔒 **Enterprise-Grade Security:** 256-bit document encryption.
-    * ⚡ **Ultra-Fast AI Engine:** Instant response generation for client inquiries.
-    * 📅 **Seamless Scheduling:** Integrated calendar booking and client follow-ups.
-    """)
-    
-    st.markdown("---")
-    st.markdown("### 🔒 Security & Privacy FAQ")
-    with st.expander("Is agency data used to train public AI models?"):
-        st.write("No. Every enterprise agency runs on an isolated client instance where documents and client conversations are kept 100% private.")
+    # --- OPTION 2: TRADITIONAL BANK WIRE ---
+    else:
+        st.subheader("🏛️ Traditional Bank Wire Transfer")
+        st.info("💼 Official Corporate Invoicing & Wire Settlement")
         
-    with st.expander("How quickly is our agency setup completed after payment?"):
-        st.write("Your account deployment and onboarding take place within 24–48 hours of payment confirmation.")
+        st.markdown("""
+        **Bank Transfer Details:**
+        * **Account Name:** PropelRealty AI Solutions LLC
+        * **Bank Name:** Global Business Bank
+        * **Account Number:** 987654321012
+        * **SWIFT / BIC:** GBBUS33XXX
+        * **Routing Number:** 123456789
+        """)
+        st.caption("Please reference your full name or agency name in the transfer notes.")
         
-    st.write("")
-    if st.button("⬅ Back to Home", type="primary"):
-        st.session_state.page = "how_it_works"
-        st.rerun()
-
-# --- PAGE 7: BOOK OUR DEMO ---
-elif st.session_state.page == "book_demo":
-    st.header("Book a Live 1-on-1 Walkthrough")
-    st.write("Schedule a direct video call with our team to see how PropelRealty AI automates lead management and document handling.")
-    
-    with st.form("demo_form"):
-        name = st.text_input("Your Name")
-        email = st.text_input("Work Email")
-        preferred_date = st.date_input("Preferred Demo Date")
-        notes = st.text_area("Specific Requirements / Team Size")
-        
-        if st.form_submit_button("REQUEST DEMO CALL ➔", type="primary", use_container_width=True):
-            if name and email:
-                st.success("Demo request submitted! We will send a calendar invite to your email shortly.")
+        reference_no = st.text_input("Enter Wire Reference / UTR Number:", placeholder="WIRE-123456")
+        if st.button("Submit Wire Reference", type="primary", use_container_width=True):
+            if reference_no:
+                st.success("✅ Wire reference received! Account setup instructions sent to your email.")
             else:
-                st.error("Please enter your name and email.")
+                st.warning("Please provide your wire reference number.")
                 
-    if st.button("⬅ Back to Home"):
-        st.session_state.page = "how_it_works"
+    st.markdown("---")
+    if st.button("← Back to Landing"):
+        st.session_state.page = "landing"
         st.rerun()
+
 
 
 
